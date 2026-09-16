@@ -363,9 +363,10 @@ Run `g-refresh` which will update the cache of projects</string>
 	<array>
 		<string>authuser</string>
 	</array>
+	<!-- x-release-please-start-version -->
 	<key>version</key>
-	<!-- x-release-please-version -->
 	<string>2.0.18</string>
+	<!-- x-release-please-end -->
 	<key>webaddress</key>
 	<string>https://github.com/jarlefosen/alfred-gcloud-shortcuts</string>
 </dict>
