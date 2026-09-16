@@ -1,0 +1,15 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "go",
+      "package-name": "alfred-gcloud-shortcuts",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "info.plist"
+        }
+      ]
+    }
+  }
+}
