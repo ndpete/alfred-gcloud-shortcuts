@@ -40,3 +40,25 @@ If you initialized gcloud recently, make sure to save the authentication locally
 - installed and authenticated `gcloud` https://cloud.google.com/sdk/
 - coreutils `brew install coreutils`
 - save [auth locally](https://github.com/jarlefosen/alfred-gcloud-shortcuts/issues/5#issuecomment-537852834): `gcloud auth application-default login`
+
+## Development
+
+Build native universal binaries (Apple Silicon arm64 + Intel amd64) and package the workflow:
+
+```bash
+# Build universal binaries (bin/products, bin/projects)
+make build
+
+# Package the .alfredworkflow file in target/
+make workflow
+
+# Build and trigger installation in Alfred
+make install
+```
+
+Alternatively, link the repository directly into your Alfred workflows directory for local development:
+
+```bash
+./scripts/link-alfred.sh
+```
+

@@ -10,6 +10,8 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22.x'
+      - name: Install lipo
+        run: go install github.com/konoui/lipo@latest
       - name: Validate JSON
         run: |
           cat products.json | jq '.' >> /dev/null
