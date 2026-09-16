@@ -12,6 +12,7 @@ import (
 	"go.deanishe.net/fuzzy"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/cloudresourcemanager/v1"
+	"google.golang.org/api/option"
 )
 
 const (
@@ -50,7 +51,7 @@ func FetchGoogleProjects(ctx context.Context) ([]ProjectDescription, error) {
 		return nil, fmt.Errorf("failed to create google client: %w", err)
 	}
 
-	s, err := cloudresourcemanager.New(goog)
+	s, err := cloudresourcemanager.NewService(ctx, option.WithHTTPClient(goog))
 	if err != nil {
 		return nil, fmt.Errorf("google resource manager: %w", err)
 	}

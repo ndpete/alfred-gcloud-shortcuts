@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"flag"
-	"io/ioutil"
 	"log"
 	"net/url"
 	"os"
@@ -46,11 +45,7 @@ type urlTemplate struct {
 }
 
 func readProducts() ([]ProductTemplate, error) {
-	f, err := os.Open("./products.json")
-	if err != nil {
-		return nil, err
-	}
-	byt, err := ioutil.ReadAll(f)
+	byt, err := os.ReadFile("./products.json")
 	if err != nil {
 		return nil, err
 	}
@@ -88,14 +83,10 @@ func run() {
 		if err := urlTemplate.Execute(buf, templateArgs); err != nil {
 			wf.FatalError(err)
 		}
-		urlBytes, err := ioutil.ReadAll(buf)
-		if err != nil {
-			wf.FatalError(err)
-			return
-		}
+		rawURL := buf.String()
 
-		generatedURL := appendURLParameters(string(urlBytes), queryParams)
-		wf.NewItem(p.Name).Arg(generatedURL).Subtitle(project).UID(string(urlBytes)).Valid(true)
+		generatedURL := appendURLParameters(rawURL, queryParams)
+		wf.NewItem(p.Name).Arg(generatedURL).Subtitle(project).UID(rawURL).Valid(true)
 	}
 
 	if query != "" {
