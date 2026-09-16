@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 
 	aw "github.com/deanishe/awgo"
+	"github.com/deanishe/awgo/update"
 	"go.deanishe.net/fuzzy"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/cloudresourcemanager/v1"
@@ -18,6 +20,8 @@ import (
 const (
 	cacheGoogleProjects = "google-projects"
 	scopeListProjects   = "https://www.googleapis.com/auth/cloudplatformprojects.readonly"
+	repoOwnerName       = "ndpete/alfred-gcloud-shortcuts"
+	updateJobName       = "checkForUpdate"
 )
 
 var (
@@ -25,6 +29,7 @@ var (
 	wf     *aw.Workflow
 
 	argRefreshProjects bool
+	argCheckUpdate     bool
 )
 
 type ProjectDescription struct {
@@ -40,9 +45,13 @@ func init() {
 		fuzzy.MaxLeadingLetterPenalty(-3.0),
 		fuzzy.UnmatchedLetterPenalty(-0.5),
 	}
-	wf = aw.New(aw.SortOptions(sopts...))
+	wf = aw.New(
+		aw.SortOptions(sopts...),
+		update.GitHub(repoOwnerName),
+	)
 
 	flag.BoolVar(&argRefreshProjects, "refresh", false, "refresh authenticated projects")
+	flag.BoolVar(&argCheckUpdate, "check", false, "check for workflow updates")
 }
 
 func FetchGoogleProjects(ctx context.Context) ([]ProjectDescription, error) {
@@ -85,6 +94,15 @@ func run() {
 	flag.Parse()
 	ctx := context.Background()
 
+	if argCheckUpdate {
+		wf.Configure(aw.TextErrors(true))
+		logger.Printf("checking for updates...")
+		if err := wf.CheckForUpdate(); err != nil {
+			wf.FatalError(err)
+		}
+		return
+	}
+
 	if argRefreshProjects {
 		wf.Configure(aw.TextErrors(true))
 		logger.Printf("refreshing projects")
@@ -100,13 +118,39 @@ func run() {
 		wf.SendFeedback()
 		return
 	}
+
+	// Trigger background check if due (> 24h) and not already running
+	if wf.UpdateCheckDue() && !wf.IsRunning(updateJobName) {
+		cmd := exec.Command(os.Args[0], "-check")
+		_ = wf.RunInBackground(updateJobName, cmd)
+	}
+
 	var query string
 	if len(args) > 0 {
 		query = args[0]
 	}
 
 	if strings.HasPrefix(query, "-") {
-		wf.NewItem("Refresh projects").Arg("-refresh").Autocomplete("-refresh").Valid(false)
+		wf.NewItem("Refresh projects").
+			Subtitle("Update cached GCP projects").
+			Arg("-refresh").Autocomplete("-refresh").Valid(false)
+
+		updateTitle := "Check for updates"
+		updateSub := "Check GitHub for new workflow releases"
+		if wf.UpdateAvailable() {
+			updateTitle = "🚀 Update available!"
+			updateSub = "Press ⏎ to open release on GitHub"
+		}
+		wf.NewItem(updateTitle).
+			Subtitle(updateSub).
+			Arg(fmt.Sprintf("https://github.com/%s/releases/latest", repoOwnerName)).
+			Autocomplete("-update").Valid(wf.UpdateAvailable())
+
+		wf.NewItem(fmt.Sprintf("Workflow version: %s", wf.Version())).
+			Subtitle("Google Cloud Shortcuts (forked by Nathan Peterson)").
+			Arg(fmt.Sprintf("https://github.com/%s", repoOwnerName)).
+			Autocomplete("-version").Valid(true)
+
 		wf.SendFeedback()
 		return
 	}
@@ -118,6 +162,15 @@ func run() {
 	}
 	if err := wf.Data.LoadJSON(cacheGoogleProjects, &projects); err != nil {
 		wf.FatalError(err)
+	}
+
+	// Show update banner at top of empty search when update is available
+	if query == "" && wf.UpdateAvailable() {
+		wf.Configure(aw.SuppressUIDs(true))
+		wf.NewItem("🚀 Update available!").
+			Subtitle("Press ⏎ to open release on GitHub").
+			Arg(fmt.Sprintf("https://github.com/%s/releases/latest", repoOwnerName)).
+			Valid(true)
 	}
 
 	for _, p := range projects {
