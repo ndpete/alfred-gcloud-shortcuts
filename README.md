@@ -23,14 +23,18 @@ If macOS displays a warning stating the binary *cannot be opened because the dev
 4. Click **"Open Anyway"** (or **"Allow Anyway"**). You only need to do this once.
 
 **Option B: Strip Quarantine via Terminal**
-Before importing, remove the quarantine attribute from the downloaded file:
+*Before importing into Alfred (recommended):*
 ```bash
 xattr -d com.apple.quarantine ~/Downloads/alfred-gcloud-shortcuts.alfredworkflow
 ```
-Or, if already imported into Alfred:
-```bash
-xattr -cr "$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/workflows/"*alfred-gcloud*
-```
+
+*Or, if already imported into Alfred:*
+1. Open **Alfred Preferences $\rightarrow$ Workflows**.
+2. Right-click **Google Cloud Shortcuts** in the sidebar $\rightarrow$ **Open in Terminal**.
+3. Run:
+   ```bash
+   xattr -cr .
+   ```
 
 ## Usage
 
