@@ -75,7 +75,7 @@
 		</array>
 	</dict>
 	<key>createdby</key>
-	<string>Jarle Fosen</string>
+	<string>Jarle Fosen (forked by Nathan Peterson)</string>
 	<key>description</key>
 	<string>gcloud shortcuts</string>
 	<key>disabled</key>
@@ -368,6 +368,6 @@ Run `g-refresh` which will update the cache of projects</string>
 	<string>2.1.0</string>
 	<!-- x-release-please-end -->
 	<key>webaddress</key>
-	<string>https://github.com/jarlefosen/alfred-gcloud-shortcuts</string>
+	<string>https://github.com/ndpete/alfred-gcloud-shortcuts</string>
 </dict>
 </plist>

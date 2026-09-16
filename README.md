@@ -1,8 +1,14 @@
 # g: GCP shortcuts for Alfred
 
+[![Latest Release](https://img.shields.io/github/v/release/ndpete/alfred-gcloud-shortcuts?style=flat-square&color=blue)](https://github.com/ndpete/alfred-gcloud-shortcuts/releases/latest)
+[![Download Workflow](https://img.shields.io/badge/Download-.alfredworkflow-success?style=flat-square&logo=apple)](https://github.com/ndpete/alfred-gcloud-shortcuts/releases/latest/download/alfred-gcloud-shortcuts.alfredworkflow)
+[![CI](https://github.com/ndpete/alfred-gcloud-shortcuts/actions/workflows/test.yml/badge.svg)](https://github.com/ndpete/alfred-gcloud-shortcuts/actions/workflows/test.yml)
+
+*A fork of [jarlefosen/alfred-gcloud-shortcuts](https://github.com/jarlefosen/alfred-gcloud-shortcuts) updated for Apple Silicon and modern GCP services.*
+
 ## Download
 
-An exported workflow is available under [releases](https://github.com/jarlefosen/alfred-gcloud-shortcuts/releases) (or your fork's releases). Make sure you meet the [requirements](#requirements).
+An exported workflow is available under [releases](https://github.com/ndpete/alfred-gcloud-shortcuts/releases). Make sure you meet the [requirements](#requirements).
 
 ### macOS Gatekeeper Authorization (First Run)
 
