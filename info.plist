@@ -365,7 +365,7 @@ Run `g-refresh` which will update the cache of projects</string>
 	</array>
 	<!-- x-release-please-start-version -->
 	<key>version</key>
-	<string>2.1.0</string>
+	<string>2.1.1</string>
 	<!-- x-release-please-end -->
 	<key>webaddress</key>
 	<string>https://github.com/ndpete/alfred-gcloud-shortcuts</string>
