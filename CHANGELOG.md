@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/ndpete/alfred-gcloud-shortcuts/compare/v2.1.0...v2.1.1) (2026-09-16)
+
+
+### Bug Fixes
+
+* **metadata:** update workflow author and repo URL ([e5f5f1c](https://github.com/ndpete/alfred-gcloud-shortcuts/commit/e5f5f1cd5848bdec2e6e9020d1f5291f72a8b07d))
+
 ## [2.1.0](https://github.com/ndpete/alfred-gcloud-shortcuts/compare/v2.0.18...v2.1.0) (2026-09-16)
 
 
