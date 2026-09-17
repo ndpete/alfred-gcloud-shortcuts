@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -50,6 +51,8 @@ func init() {
 		update.GitHub(repoOwnerName),
 	)
 
+	flag.CommandLine.Init(os.Args[0], flag.ContinueOnError)
+	flag.CommandLine.SetOutput(io.Discard)
 	flag.BoolVar(&argRefreshProjects, "refresh", false, "refresh authenticated projects")
 	flag.BoolVar(&argCheckUpdate, "check", false, "check for workflow updates")
 }
@@ -91,7 +94,7 @@ func FetchGoogleProjects(ctx context.Context) ([]ProjectDescription, error) {
 
 func run() {
 	args := wf.Args()
-	flag.Parse()
+	_ = flag.CommandLine.Parse(os.Args[1:])
 	ctx := context.Background()
 
 	if argCheckUpdate {
@@ -127,10 +130,15 @@ func run() {
 
 	var query string
 	if len(args) > 0 {
-		query = args[0]
+		query = strings.TrimSpace(args[0])
 	}
 
-	if strings.HasPrefix(query, "-") {
+	qLower := strings.ToLower(query)
+	if strings.HasPrefix(qLower, "-") ||
+		strings.HasPrefix(qLower, "update") ||
+		strings.HasPrefix(qLower, "version") ||
+		qLower == "refresh" {
+
 		wf.NewItem("Refresh projects").
 			Subtitle("Update cached GCP projects").
 			Arg("-refresh").Autocomplete("-refresh").Valid(false)
@@ -144,12 +152,16 @@ func run() {
 		wf.NewItem(updateTitle).
 			Subtitle(updateSub).
 			Arg(fmt.Sprintf("https://github.com/%s/releases/latest", repoOwnerName)).
-			Autocomplete("-update").Valid(wf.UpdateAvailable())
+			Autocomplete("-update").Valid(true)
 
 		wf.NewItem(fmt.Sprintf("Workflow version: %s", wf.Version())).
 			Subtitle("Google Cloud Shortcuts (forked by Nathan Peterson)").
 			Arg(fmt.Sprintf("https://github.com/%s", repoOwnerName)).
 			Autocomplete("-version").Valid(true)
+
+		if qLower != "-" && qLower != "" {
+			wf.Filter(query)
+		}
 
 		wf.SendFeedback()
 		return
