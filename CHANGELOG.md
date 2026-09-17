@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/ndpete/alfred-gcloud-shortcuts/compare/v2.1.1...v2.2.0) (2026-09-17)
+
+
+### Features
+
+* **updater:** add GitHub release update notifier and workflow commands ([#4](https://github.com/ndpete/alfred-gcloud-shortcuts/issues/4)) ([dc567b1](https://github.com/ndpete/alfred-gcloud-shortcuts/commit/dc567b1c137b011386684750aec6c1624c3352d3))
+
 ## [2.1.1](https://github.com/ndpete/alfred-gcloud-shortcuts/compare/v2.1.0...v2.1.1) (2026-09-16)
 
 
