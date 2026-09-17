@@ -110,7 +110,12 @@
 				<key>runningsubtext</key>
 				<string></string>
 				<key>script</key>
-				<string>query=$1
+				<string>if [[ "${project}" =~ ^https?:// ]]; then
+	open "${project}"
+	exit 0
+fi
+
+query=$1
 
 ./bin/products -query "${query}" -project "${project}"</string>
 				<key>scriptargtype</key>
